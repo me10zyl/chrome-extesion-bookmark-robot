@@ -8,34 +8,9 @@ function on_browser_action(){
 
 on_browser_action()
 
+import * as bm from '../js/bookmark.js'
+
 (async (chrome) => {
-  async function get_domain_map(map2) {
-    function traverse(tree, map) {
-      //console.log(tree.id,tree.title)
-      for (let i in tree.children) {
-        let child = tree.children[i];
-        if (child.url) {
-          let exec = /\/\/(.+?)\//.exec(child.url);
-          if (!exec || exec.length <= 1) {
-            console.error('error', child, exec)
-          } else {
-            let domain = exec[1]
-            if (!map[domain]) {
-              map[domain] = []
-            }
-            map[domain].push(child)
-          }
-        }
-        traverse(child, map)
-      }
-    }
-
-    let tree2 = await new Promise((r) => chrome.bookmarks.getTree((callback) => {
-      r(callback)
-    }));
-
-    traverse(tree2[0], map2)
-  }
 
   function group_by(domain_map){
     let new_map = {};
@@ -139,7 +114,7 @@ on_browser_action()
 
   async function do_classfiy_by_domain() {
     let domain_map = {};
-    await get_domain_map(domain_map)
+    await bm.get_domain_map(domain_map)
     console.log(domain_map)
     let new_map = group_by(domain_map);
     console.log(new_map)

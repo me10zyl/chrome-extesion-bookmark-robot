@@ -1,11 +1,25 @@
 <template>
-
+  <div>
+    Tree
+  </div>
 </template>
 
 <script>
-    export default {
-        name: "Tree"
+
+  import * as bm from "../js/bookmark"
+
+  export default {
+    name: "Tree",
+    mounted() {
+      (async ()=> {
+        let domain_map = {}
+        bm.get_domain_map(domain_map)
+        console.log(domain_map)
+      })()
     }
+  }
+
+
 </script>
 
 <style scoped>

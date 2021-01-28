@@ -36,11 +36,11 @@ function configFunc(env, argv) {
             extractCSS: !isDevMode,
           },
         },
-        {
+        /*{
           test: /\.js$/,
           loader: 'babel-loader',
           exclude: /(node_modules|bower_components)/,
-        },
+        },*/
         {
           test: /\.scss$/,
           use: [

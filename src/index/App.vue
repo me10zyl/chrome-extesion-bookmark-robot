@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Tree />
+    <Tree></Tree>
   </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
   components: {Tree},
   data() {
     return {
-      msg: 'Welcome!'
+
     }
   }
 }
