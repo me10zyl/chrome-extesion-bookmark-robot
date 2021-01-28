@@ -1,16 +1,13 @@
-function on_browser_action(){
+import * as bm from '../js/bookmark.js'
+
+
+(async (chrome) => {
+
   chrome.browserAction.onClicked.addListener((tab)=>{
     chrome.tabs.create({
       url : chrome.runtime.getURL("index.html")
     })
   })
-}
-
-on_browser_action()
-
-import * as bm from '../js/bookmark.js'
-
-(async (chrome) => {
 
   function group_by(domain_map){
     let new_map = {};
@@ -89,28 +86,6 @@ import * as bm from '../js/bookmark.js'
     }
   }
 
-  async function remove_duplicate_folders(domain_map){
-    console.log('remove_duplicate_folders', domain_map)
-    for(let domain in domain_map){
-      for(let index in domain_map[domain]) {
-        let thus = domain_map[domain][index];
-        let parent = await get_bookmark(thus.parentId)
-        let title = parent.title;
-        let parent_parent =  await get_bookmark(parent.parentId);
-        let last_parent_id = -1;
-        while(parent_parent != null && parent_parent.title == title){
-          last_parent_id = parent_parent.id;
-          parent_parent = await get_bookmark(parent_parent.parentId);
-        }
-        if(last_parent_id > 0){
-          chrome.bookmarks.move(thus.id, {
-            parentId : last_parent_id
-          })
-        }
-      }
-    }
-  }
-
 
   async function do_classfiy_by_domain() {
     let domain_map = {};
@@ -122,12 +97,11 @@ import * as bm from '../js/bookmark.js'
   }
 
   function on_created_event(){
+    console.log('on created event set up')
     chrome.bookmarks.onCreated.addListener((id,bm)=>{
       setTimeout(do_classfiy_by_domain, 2000);
     })
   }
-
-
 
   on_created_event()
 

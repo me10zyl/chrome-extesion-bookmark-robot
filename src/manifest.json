@@ -5,15 +5,15 @@
   "browser_action": {
 
   },
-  "description": "vue-chrome-extension-boilerplate",
+  "name": "Bookmark Robot",
+  "description": "Classify ur bookmark onCreated new bookmark, or creating classified folders by domain in one folder on exist bookmarks.",
   "icons": {
-    "16": "assets/icons/icon_16.png",
-    "32": "assets/icons/icon_32.png",
-    "64": "assets/icons/icon_64.png",
-    "128": "assets/icons/icon_128.png"
+    "16": "assets/icons/icon.png",
+    "32": "assets/icons/icon.png",
+    "64": "assets/icons/icon.png",
+    "128": "assets/icons/icon.png"
   },
   "manifest_version": 2,
-  "name": "vue-chrome-extension-boilerplate",
   "options_ui": {
     "chrome_style": false,
     "page": "./options.html"
