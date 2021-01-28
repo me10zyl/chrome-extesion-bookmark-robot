@@ -1,12 +1,14 @@
 <template>
   <div>
-    <h1>{{ msg }}</h1>
-    hello world
+    <Tree />
   </div>
 </template>
 
 <script>
+import Tree from "../components/Tree.vue";
+
 export default {
+  components: {Tree},
   data() {
     return {
       msg: 'Welcome!'

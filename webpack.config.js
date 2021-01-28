@@ -18,8 +18,9 @@ function configFunc(env, argv) {
     entry: {
       options: './options/index.js',
       popup: './popup/index.js',
-      background: './background/index.js',
+      background: './background/background.js',
       contentScripts: './contentScripts/index.js',
+      index : './index/index.js'
     },
     output: {
       path: path.resolve(__dirname, './dist'),
@@ -108,6 +109,12 @@ function configFunc(env, argv) {
         template: './index.html',
         filename: 'options.html',
         chunks: ['options'],
+      }),
+      new HtmlWebpackPlugin({
+        title: 'Index',
+        template: './index.html',
+        filename: 'index.html',
+        chunks: ['index'],
       }),
       new HtmlWebpackPlugin({
         title: 'Popup',
