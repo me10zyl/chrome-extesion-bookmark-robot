@@ -22,7 +22,8 @@
     "background",
     "storage",
     "tabs",
-    "bookmarks"
+    "bookmarks",
+    "*//localhost*"
   ],
   "version": "1.0.0",
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"

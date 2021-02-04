@@ -1,4 +1,5 @@
 import * as bm from '../js/bookmark.js'
+import utils from "../js/utils";
 
 
 (async (chrome) => {
@@ -20,6 +21,7 @@ import * as bm from '../js/bookmark.js'
         }
         for(let arrayIndex in array) {
           let item = array[arrayIndex]
+          //以父亲节点创建map
           if (!new_map[key][item.parentId]) {
             new_map[key][item.parentId] = []
           }
@@ -54,11 +56,13 @@ import * as bm from '../js/bookmark.js'
     return parent;
   }
 
-  async function  iter(domain, parentId, bm){
+  async function iter(domain, parentId, bm){
+    //如果父亲已经是域名文件夹就跳过
     let parent = await get_bookmark(parentId);
     if(parent.title === domain){
       return ;
     }
+    //获取所有兄弟没有域名文件夹就创建文件夹
     let id = await get_domain_folder_id(parentId, domain);
     if(id < 0){
       let newCreated = await new Promise((r)=>{chrome.bookmarks.create({
@@ -69,37 +73,48 @@ import * as bm from '../js/bookmark.js'
       })})
       id = newCreated.id;
     }
+    //移动
     chrome.bookmarks.move(bm.id, {
       parentId : id
     })
   }
 
-  async function create_folder(new_map){
+  async function create_folder(new_map, newbm){
     for(var i in new_map){
-      for(var j in new_map[i]){
-        if(new_map[i][j].length > 1) {
-          for (var x in new_map[i][j]) {
-            await iter(i,j, new_map[i][j][x])
+      for(var j in new_map[i]) {
+        for (var x in new_map[i][j]) {
+          if(new_map[i][j].length > 1) {
+            await iter(i, j, new_map[i][j][x])
           }
         }
       }
     }
+    let domain = utils.get_domain_from_url(newbm.url)
+    if(domain) {
+      let id = await get_domain_folder_id(newbm.parentId, domain);
+      if(id > 0){
+        chrome.bookmarks.move(newbm.id, {
+          parentId : id
+        })
+      }
+    }
+
   }
-
-
-  async function do_classfiy_by_domain() {
+  async function do_classfiy_by_domain(newbm) {
     let domain_map = {};
     await bm.get_domain_map(domain_map)
     console.log(domain_map)
     let new_map = group_by(domain_map);
     console.log(new_map)
-    await create_folder(new_map)
+    await create_folder(new_map, newbm)
   }
 
   function on_created_event(){
     console.log('on created event set up')
     chrome.bookmarks.onCreated.addListener((id,bm)=>{
-      setTimeout(do_classfiy_by_domain, 2000);
+      setTimeout(async ()=>{
+        do_classfiy_by_domain(await get_bookmark(id))
+      }, 2000);
     })
   }
 

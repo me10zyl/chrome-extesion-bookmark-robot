@@ -11,5 +11,13 @@ export default {
 
       var uuid = s.join("");
       return uuid;
+  },
+  get_domain_from_url(url){
+    let exec = /\/\/(.+?)\//.exec(url);
+    if (!exec || exec.length <= 1) {
+      return null;
+    } else {
+      return exec[1];
+    }
   }
 }

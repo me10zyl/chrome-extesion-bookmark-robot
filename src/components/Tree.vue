@@ -28,6 +28,9 @@
     watch: {
       filterText(val) {
         //console.log(this.$refs)
+        new Promise((r)=>{
+          //chrome.bookmarks.search(val,)
+        })
         this.$refs.tree.filter(val);
         if(!val){
           console.log('blank.collapse all')
