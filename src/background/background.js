@@ -3,6 +3,7 @@ import utils from "../js/utils";
 
 
 (async (chrome) => {
+  let enableAuto = true;
 
   chrome.browserAction.onClicked.addListener((tab)=>{
     chrome.tabs.create({
@@ -110,15 +111,33 @@ import utils from "../js/utils";
   }
 
   function on_created_event(){
-    console.log('on created event set up')
+    console.log('on created event set up - ' + new Date())
     chrome.bookmarks.onCreated.addListener((id,bm)=>{
       setTimeout(async ()=>{
-        do_classfiy_by_domain(await get_bookmark(id))
+        if(enableAuto) {
+          do_classfiy_by_domain(await get_bookmark(id))
+        }
       }, 2000);
     })
   }
 
+  function on_message_event(){
+    chrome.runtime.onMessage.addListener(
+      function(request, sender, sendResponse) {
+
+        if (request.enableAutoClassify)
+          enableAuto = request.enableAutoClassify;
+        console.log(sender.tab ?
+          "from a content script:" + sender.tab.url :
+          "from the extension enable:" + enableAuto);
+          sendResponse({farewell: "classify switch okay"});
+      }
+    );
+  }
+
+
   on_created_event()
+  on_message_event()
 
 })(chrome)
 
