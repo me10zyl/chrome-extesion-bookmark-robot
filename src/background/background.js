@@ -3,7 +3,7 @@ import utils from "../js/utils";
 
 
 (async (chrome) => {
-  let enableAuto = true;
+  let enableAuto = false;
 
   chrome.browserAction.onClicked.addListener((tab)=>{
     chrome.tabs.create({
