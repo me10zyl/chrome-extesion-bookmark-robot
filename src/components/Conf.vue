@@ -14,11 +14,20 @@
                 console.log(response.farewell);
               }
             });
+            localStorage['enableAutoClassify'] = this.enableAutoClassify
           }
         },
         data(){
           return {
             enableAutoClassify : false
+          }
+        },
+        created() {
+          console.log('mounted')
+          if('enableAutoClassify' in localStorage){
+            this.$set(this, 'enableAutoClassify',JSON.parse(localStorage['enableAutoClassify']))
+            console.log('set this.enableAutoClassify=' + this.enableAutoClassify)
+
           }
         }
     }
